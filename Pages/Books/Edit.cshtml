@@ -1,0 +1,42 @@
+﻿@page
+@model Iancau_Maria_Lab2.Pages.Books.EditModel
+
+@{
+    ViewData["Title"] = "Edit Book";
+}
+
+<h1>Edit Book</h1>
+
+<h4>Book</h4>
+<hr />
+<div>
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Book.Title"></label>
+            <input asp-for="Book.Title" class="form-control" />
+            <span asp-validation-for="Book.Title" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Book.AuthorID"></label>
+            <select asp-for="Book.AuthorID" class="form-control" asp-items="Model.Authors"></select>
+            <span asp-validation-for="Book.AuthorID" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Book.Price"></label>
+            <input asp-for="Book.Price" class="form-control" />
+            <span asp-validation-for="Book.Price" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Book.PublishingDate"></label>
+            <input asp-for="Book.PublishingDate" class="form-control" />
+            <span asp-validation-for="Book.PublishingDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Book.PublisherID"></label>
+            <select asp-for="Book.PublisherID" class="form-control" asp-items="Model.Publishers"></select>
+            <span asp-validation-for="Book.PublisherID" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

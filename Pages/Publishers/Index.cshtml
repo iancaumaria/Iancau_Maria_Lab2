@@ -1,0 +1,34 @@
+﻿@page
+@model Iancau_Maria_Lab2.Pages.Publishers.IndexModel
+
+@{
+    ViewData["Title"] = "Publisher List";
+}
+
+<h1>Publisher List</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Publishers[0].PublisherName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Publishers)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublisherName)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

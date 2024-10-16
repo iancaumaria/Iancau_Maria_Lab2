@@ -1,0 +1,37 @@
+﻿@page
+@model Iancau_Maria_Lab2.Pages.Books.CreateModel
+
+<h1>Create</h1>
+
+<h4>Book</h4>
+<hr />
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Book.Title" class="control-label"></label>
+        <input asp-for="Book.Title" class="form-control" />
+        <span asp-validation-for="Book.Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Book.Price" class="control-label"></label>
+        <input asp-for="Book.Price" class="form-control" />
+        <span asp-validation-for="Book.Price" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Book.PublishingDate" class="control-label"></label>
+        <input asp-for="Book.PublishingDate" class="form-control" />
+        <span asp-validation-for="Book.PublishingDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Book.AuthorID" class="control-label"></label>
+        <select asp-for="Book.AuthorID" class="form-control" asp-items="@(ViewData["AuthorID"] as SelectList)"></select> <!-- Conversia la SelectList -->
+        <span asp-validation-for="Book.AuthorID" class="text-danger"></span>
+    </div>
+    <input type="hidden" asp-for="Book.Id" />
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
