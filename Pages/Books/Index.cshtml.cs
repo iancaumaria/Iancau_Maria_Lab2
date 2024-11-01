@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using Iancau_Maria_Lab2.Data;
 using Iancau_Maria_Lab2.Models;
 
