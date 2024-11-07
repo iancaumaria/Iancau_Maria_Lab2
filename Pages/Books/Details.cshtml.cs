@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Iancau_Maria_Lab2.Data;
 using Iancau_Maria_Lab2.Models;
+using System.Threading.Tasks;
 
 namespace Iancau_Maria_Lab2.Pages.Books
 {
@@ -16,24 +16,24 @@ namespace Iancau_Maria_Lab2.Pages.Books
             _context = context;
         }
 
-        public Book Book { get; set; } = default!;
+        public Book Book { get; set; }
+        public List<Category> Categories { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Book = await _context.Books
-                .Include(b => b.Publisher)  
-                .Include(b => b.Author)      
+            Book = await _context.Book
+                .Include(b => b.Author)
+                .Include(b => b.Publisher)
+                .Include(b => b.BookCategories)
+                    .ThenInclude(bc => bc.Category) // Include categories
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (Book == null)
             {
                 return NotFound();
             }
+
+            Categories = Book.BookCategories.Select(bc => bc.Category).ToList(); // Get the categories
             return Page();
         }
     }

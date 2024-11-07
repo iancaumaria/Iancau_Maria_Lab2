@@ -1,23 +1,26 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Iancau_Maria_Lab2.Data;
 using Iancau_Maria_Lab2.Models;
 
-namespace Iancau_Maria_Lab2.Pages.Publishers
+namespace Iancau_Maria_Lab2.Pages.Authors
 {
     public class DeleteModel : PageModel
     {
-        private readonly Iancau_Maria_Lab2Context _context;
+        private readonly Iancau_Maria_Lab2.Data.Iancau_Maria_Lab2Context _context;
 
-        public DeleteModel(Iancau_Maria_Lab2Context context)
+        public DeleteModel(Iancau_Maria_Lab2.Data.Iancau_Maria_Lab2Context context)
         {
             _context = context;
         }
 
         [BindProperty]
-        public Publisher Publisher { get; set; } = default!;
+        public Author Author { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -26,15 +29,15 @@ namespace Iancau_Maria_Lab2.Pages.Publishers
                 return NotFound();
             }
 
-            var publisher = await _context.Publisher.FirstOrDefaultAsync(m => m.Id == id);
+            var author = await _context.Author.FirstOrDefaultAsync(m => m.ID == id);
 
-            if (publisher == null)
+            if (author == null)
             {
                 return NotFound();
             }
             else
             {
-                Publisher = publisher;
+                Author = author;
             }
             return Page();
         }
@@ -46,12 +49,11 @@ namespace Iancau_Maria_Lab2.Pages.Publishers
                 return NotFound();
             }
 
-            var publisher = await _context.Publisher.FindAsync(id);
-
-            if (publisher != null)
+            var author = await _context.Author.FindAsync(id);
+            if (author != null)
             {
-                Publisher = publisher;
-                _context.Publisher.Remove(Publisher);
+                Author = author;
+                _context.Author.Remove(Author);
                 await _context.SaveChangesAsync();
             }
 

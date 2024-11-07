@@ -40,7 +40,7 @@ namespace Iancau_Maria_Lab2.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Authors");
+                    b.ToTable("Author");
                 });
 
             modelBuilder.Entity("Iancau_Maria_Lab2.Models.Book", b =>
@@ -51,13 +51,13 @@ namespace Iancau_Maria_Lab2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AuthorID")
+                    b.Property<int?>("AuthorID")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("PublisherID")
+                    b.Property<int?>("PublisherID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PublishingDate")
@@ -73,10 +73,10 @@ namespace Iancau_Maria_Lab2.Migrations
 
                     b.HasIndex("PublisherID");
 
-                    b.ToTable("Books");
+                    b.ToTable("Book");
                 });
 
-            modelBuilder.Entity("Iancau_Maria_Lab2.Models.Publisher", b =>
+            modelBuilder.Entity("Iancau_Maria_Lab2.Models.BookCategory", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -84,32 +84,106 @@ namespace Iancau_Maria_Lab2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("PublisherName")
+                    b.Property<int>("BookID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BookID");
+
+                    b.HasIndex("CategoryID");
+
+                    b.ToTable("BookCategory");
+                });
+
+            modelBuilder.Entity("Iancau_Maria_Lab2.Models.Category", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
-                    b.ToTable("Publishers");
+                    b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("Iancau_Maria_Lab2.Models.Publisher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("PublisherName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Publisher");
                 });
 
             modelBuilder.Entity("Iancau_Maria_Lab2.Models.Book", b =>
                 {
                     b.HasOne("Iancau_Maria_Lab2.Models.Author", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Books")
+                        .HasForeignKey("AuthorID");
 
                     b.HasOne("Iancau_Maria_Lab2.Models.Publisher", "Publisher")
                         .WithMany("Books")
-                        .HasForeignKey("PublisherID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PublisherID");
 
                     b.Navigation("Author");
 
                     b.Navigation("Publisher");
+                });
+
+            modelBuilder.Entity("Iancau_Maria_Lab2.Models.BookCategory", b =>
+                {
+                    b.HasOne("Iancau_Maria_Lab2.Models.Book", "Book")
+                        .WithMany("BookCategories")
+                        .HasForeignKey("BookID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Iancau_Maria_Lab2.Models.Category", "Category")
+                        .WithMany("BookCategories")
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Iancau_Maria_Lab2.Models.Author", b =>
+                {
+                    b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("Iancau_Maria_Lab2.Models.Book", b =>
+                {
+                    b.Navigation("BookCategories");
+                });
+
+            modelBuilder.Entity("Iancau_Maria_Lab2.Models.Category", b =>
+                {
+                    b.Navigation("BookCategories");
                 });
 
             modelBuilder.Entity("Iancau_Maria_Lab2.Models.Publisher", b =>

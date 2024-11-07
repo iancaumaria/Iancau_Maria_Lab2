@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Iancau_Maria_Lab2.Data;
 using Iancau_Maria_Lab2.Models;
-using System.Threading.Tasks;
 
 namespace Iancau_Maria_Lab2.Pages.Books
 {
@@ -17,34 +20,64 @@ namespace Iancau_Maria_Lab2.Pages.Books
         }
 
         [BindProperty]
-        public Book Book { get; set; } = default!;
+        public Book Book { get; set; }
 
-        public IActionResult OnGet()
+        public List<AssignedCategoryData> AssignedCategoryDataList { get; set; }
+
+        public SelectList Authors { get; set; }
+        public SelectList Publishers { get; set; }
+
+        public async Task<IActionResult> OnGetAsync()
         {
-            // Lista pentru Publisher
-            ViewData["PublisherID"] = new SelectList(_context.Publishers, "ID", "PublisherName");
+            Authors = new SelectList(await _context.Author.ToListAsync(), "ID", "FullName");
+            Publishers = new SelectList(await _context.Publisher.ToListAsync(), "ID", "PublisherName");
 
-            // Lista pentru Author
-            ViewData["AuthorID"] = new SelectList(_context.Authors, "ID", "FirstName"); // Asigură-te că folosești "FirstName" și "LastName" corect
+            Book = new Book();
+            Book.BookCategories = new List<BookCategory>();
+
+            PopulateAssignedCategoryData();
 
             return Page();
         }
 
-
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string[] selectedCategories)
         {
             if (!ModelState.IsValid)
             {
-                ViewData["AuthorID"] = new SelectList(_context.Authors, "ID", "LastName", Book.AuthorID);
-                ViewData["PublisherID"] = new SelectList(_context.Publishers, "ID", "PublisherName", Book.PublisherID);
                 return Page();
             }
 
-            _context.Books.Add(Book);
-            await _context.SaveChangesAsync();
+            var newBook = new Book();
 
+            if (selectedCategories != null)
+            {
+                newBook.BookCategories = new List<BookCategory>();
+                foreach (var category in selectedCategories)
+                {
+                    newBook.BookCategories.Add(new BookCategory
+                    {
+                        CategoryID = int.Parse(category)
+                    });
+                }
+            }
+
+            Book.BookCategories = newBook.BookCategories;
+
+            _context.Book.Add(Book);
+            await _context.SaveChangesAsync();
             return RedirectToPage("./Index");
+        }
+
+        private void PopulateAssignedCategoryData()
+        {
+            var allCategories = _context.Category.ToList();
+            AssignedCategoryDataList = allCategories.Select(c => new AssignedCategoryData
+            {
+                CategoryID = c.ID,
+                Name = c.Name
+            }).ToList();
         }
     }
 }
+
 

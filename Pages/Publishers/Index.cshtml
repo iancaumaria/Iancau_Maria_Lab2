@@ -1,17 +1,28 @@
-﻿@page
+﻿@page "{id:int?}"
+
 @model Iancau_Maria_Lab2.Pages.Publishers.IndexModel
 
 @{
-    ViewData["Title"] = "Publisher List";
+    ViewData["Title"] = "Publishers";
 }
 
-<h1>Publisher List</h1>
+<h1>Publishers</h1>
 
-<table class="table">
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Publishers[0].PublisherName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Publishers[0].Id) <!-- Updated to 'Id' -->
+            </th>
+            <th>
+                Books Count
             </th>
             <th></th>
         </tr>
@@ -20,9 +31,9 @@
         @foreach (var item in Model.Publishers)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PublisherName)
-                </td>
+                <td>@Html.DisplayFor(modelItem => item.PublisherName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Id)</td> <!-- Updated to 'Id' -->
+                <td>@item.Books.Count</td> <!-- Updated to 'Books' -->
                 <td>
                     <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |

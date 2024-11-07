@@ -25,7 +25,7 @@ namespace Iancau_Maria_Lab2.Pages.Publishers
                 return NotFound();
             }
 
-            Publisher = await _context.Publishers
+            Publisher = await _context.Publisher
                 .FirstOrDefaultAsync(m => m.Id == id); 
 
             if (Publisher == null)

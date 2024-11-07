@@ -2,42 +2,47 @@
 @model Iancau_Maria_Lab2.Pages.Books.DetailsModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Book Details";
 }
 
-<h1>Details</h1>
+<h1>Book Details</h1>
 
 <div>
-    <h4>Book</h4>
+    <h4>Title</h4>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Book.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Book.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Book.Author)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Book.Author)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Book.Price)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Book.Price)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Book.PublishingDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Book.PublishingDate)
-        </dd>
-    </dl>
+    <p>@Model.Book.Title</p>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Book.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+    <h4>Author</h4>
+    <hr />
+    <p>@Model.Book.Author.FullName</p>
 </div>
+<div>
+    <h4>Price</h4>
+    <hr />
+    <p>@Model.Book.Price</p>
+</div>
+<div>
+    <h4>Publishing Date</h4>
+    <hr />
+    <p>@Model.Book.PublishingDate.ToString("d")</p>
+</div>
+<div>
+    <h4>Publisher</h4>
+    <hr />
+    <p>@Model.Book.Publisher.PublisherName</p>
+</div>
+
+<div>
+    <h4>Categories</h4>
+    <hr />
+    <ul>
+        @foreach (var category in Model.Categories)
+        {
+            <li>@category.CategoryName</li>
+        }
+    </ul>
+</div>
+
+<a asp-page="./Index" class="btn btn-primary">Back to List</a>
+

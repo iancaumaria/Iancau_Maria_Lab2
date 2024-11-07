@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Iancau_Maria_Lab2.Models;
-using System.Threading.Tasks;
 using Iancau_Maria_Lab2.Data;
+using Iancau_Maria_Lab2.Models;
 
 namespace Iancau_Maria_Lab2.Pages.Books
 {
@@ -18,63 +20,89 @@ namespace Iancau_Maria_Lab2.Pages.Books
         }
 
         [BindProperty]
-        public Book Book { get; set; } // Cartea pe care o editezi
+        public Book Book { get; set; }
 
-        public SelectList Authors { get; set; } // Lista derulantă pentru autori
-        public SelectList Publishers { get; set; } // Lista derulantă pentru edituri
+        public List<AssignedCategoryData> AssignedCategoryDataList { get; set; }
+
+        public SelectList Authors { get; set; }
+        public SelectList Publishers { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Book = await _context.Books
-                .Include(b => b.Author)
-                .Include(b => b.Publisher)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Book = await _context.Book.Include(b => b.BookCategories).FirstOrDefaultAsync(m => m.Id == id);
 
             if (Book == null)
             {
                 return NotFound();
             }
 
-            // Populează listele derulante
-            Authors = new SelectList(await _context.Authors.ToListAsync(), "Id", "FullName");
-            Publishers = new SelectList(await _context.Publishers.ToListAsync(), "Id", "PublisherName");
+            Authors = new SelectList(await _context.Author.ToListAsync(), "ID", "FullName");
+            Publishers = new SelectList(await _context.Publisher.ToListAsync(), "ID", "PublisherName");
+
+            PopulateAssignedCategoryData();
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string[] selectedCategories)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Book).State = EntityState.Modified;
+            var bookToUpdate = await _context.Book.Include(b => b.BookCategories).FirstOrDefaultAsync(b => b.Id == Book.Id);
 
-            try
+            if (bookToUpdate == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BookExists(Book.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
+            // Update book properties
+            bookToUpdate.Title = Book.Title;
+            bookToUpdate.AuthorID = Book.AuthorID;
+            bookToUpdate.Price = Book.Price;
+            bookToUpdate.PublishingDate = Book.PublishingDate;
+            bookToUpdate.PublisherID = Book.PublisherID;
+
+            // Handle category selections
+            if (selectedCategories != null)
+            {
+                var selectedCategoriesHS = new HashSet<string>(selectedCategories);
+                var bookCategories = new HashSet<int>(bookToUpdate.BookCategories.Select(c => c.CategoryID));
+
+                foreach (var category in _context.Category)
+                {
+                    if (selectedCategoriesHS.Contains(category.ID.ToString()))
+                    {
+                        if (!bookCategories.Contains(category.ID))
+                        {
+                            bookToUpdate.BookCategories.Add(new BookCategory { CategoryID = category.ID });
+                        }
+                    }
+                    else
+                    {
+                        if (bookCategories.Contains(category.ID))
+                        {
+                            var categoryToRemove = bookToUpdate.BookCategories.Single(c => c.CategoryID == category.ID);
+                            _context.Remove(categoryToRemove);
+                        }
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
             return RedirectToPage("./Index");
         }
 
-        private bool BookExists(int id)
+        private void PopulateAssignedCategoryData()
         {
-            return _context.Books.Any(e => e.Id == id);
+            var allCategories = _context.Category.ToList();
+            AssignedCategoryDataList = allCategories.Select(c => new AssignedCategoryData
+            {
+                CategoryID = c.ID,
+                Name = c.Name
+            }).ToList();
         }
     }
-
 }
-

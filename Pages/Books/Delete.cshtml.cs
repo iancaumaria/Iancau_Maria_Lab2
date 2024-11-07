@@ -21,7 +21,7 @@ namespace Iancau_Maria_Lab2.Pages.Books
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Book = await _context.Books
+            Book = await _context.Book
                 .Include(b => b.Author)
                 .Include(b => b.Publisher)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -36,11 +36,11 @@ namespace Iancau_Maria_Lab2.Pages.Books
 
         public async Task<IActionResult> OnPostAsync(int id)
         {
-            Book = await _context.Books.FindAsync(id);
+            Book = await _context.Book.FindAsync(id);
 
             if (Book != null)
             {
-                _context.Books.Remove(Book);
+                _context.Book.Remove(Book);
                 await _context.SaveChangesAsync();
             }
 
