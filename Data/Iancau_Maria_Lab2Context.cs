@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Iancau_Maria_Lab2.Models;
 using Microsoft.EntityFrameworkCore;
-using Iancau_Maria_Lab2.Models;
-using System.Collections;
-using System.Configuration;
 
 namespace Iancau_Maria_Lab2.Data
 {
@@ -26,6 +20,22 @@ namespace Iancau_Maria_Lab2.Data
        
         public DbSet<Category> Category { get; set; }
         public DbSet<BookCategory> BookCategories { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Configuring the Book <-> Borrowing relationship
+            modelBuilder.Entity<Borrowing>()
+                .HasOne(b => b.Book) // Borrowing has one Book
+                .WithOne(bk => bk.Borrowing) // Book has one Borrowing
+                .HasForeignKey<Borrowing>(b => b.BookID) // Specify the FK on Borrowing
+                .OnDelete(DeleteBehavior.SetNull); // Specify delete behavior, SetNull is a safe choice
+
+            // You might also need to configure other relationships like Borrowing <-> Member if necessary.
+        }
+        public DbSet<Iancau_Maria_Lab2.Models.Member> Member { get; set; } = default!;
+        public DbSet<Iancau_Maria_Lab2.Models.Borrowing> Borrowing { get; set; } = default!;
     }
 
 }
