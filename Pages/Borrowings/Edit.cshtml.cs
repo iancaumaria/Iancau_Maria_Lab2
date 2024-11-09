@@ -30,16 +30,21 @@ namespace Iancau_Maria_Lab2.Pages.Borrowings
                 return NotFound();
             }
 
-            var borrowing =  await _context.Borrowing.FirstOrDefaultAsync(m => m.ID == id);
+            var borrowing = await _context.Borrowing.FirstOrDefaultAsync(m => m.ID == id);
             if (borrowing == null)
             {
                 return NotFound();
             }
             Borrowing = borrowing;
-           ViewData["BookID"] = new SelectList(_context.Book, "Id", "Id");
-           ViewData["MemberID"] = new SelectList(_context.Member, "ID", "ID");
+
+            // Preluăm lista de membri și cărți, folosind numele acestora
+            ViewData["MemberID"] = new SelectList(_context.Member, "ID", "FullName"); // presupunând că 'FullName' este o proprietate de tip string
+            ViewData["BookID"] = new SelectList(_context.Book, "Id", "Title"); // presupunând că 'Title' este proprietatea dorită
+
             return Page();
         }
+
+
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more information, see https://aka.ms/RazorPagesCRUD.

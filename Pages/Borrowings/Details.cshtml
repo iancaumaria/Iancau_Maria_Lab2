@@ -15,22 +15,31 @@
             @Html.DisplayNameFor(model => model.Borrowing.Member)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Borrowing.Member.ID)
+            <strong>@Model.Borrowing.Member.FullName</strong> <!-- Afișează numele complet al membrului -->
         </dd>
+
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Borrowing.Book)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Borrowing.Book.Id)
+            <strong>@Model.Borrowing.Book.Title</strong> <!-- Afișează titlul cărții -->
         </dd>
+        <dd class="col-sm-10">
+            <strong>Author:</strong> @Model.Borrowing.Book.Author.FullName <!-- Afișează autorul cărții -->
+        </dd>
+        <dd class="col-sm-10">
+            <strong>Publisher:</strong> @Model.Borrowing.Book.Publisher.PublisherName <!-- Afișează editorul cărții -->
+        </dd>
+
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Borrowing.ReturnDate)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Borrowing.ReturnDate)
+            @Model.Borrowing.ReturnDate.ToString("d") <!-- Afișează data de returnare -->
         </dd>
     </dl>
 </div>
+
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Borrowing.ID">Edit</a> |
     <a asp-page="./Index">Back to List</a>

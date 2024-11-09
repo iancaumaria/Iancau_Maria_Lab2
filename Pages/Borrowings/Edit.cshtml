@@ -16,14 +16,15 @@
             <input type="hidden" asp-for="Borrowing.ID" />
             <div class="form-group">
                 <label asp-for="Borrowing.MemberID" class="control-label"></label>
-                <select asp-for="Borrowing.MemberID" class="form-control" asp-items="ViewBag.MemberID"></select>
+                <select asp-for="Borrowing.MemberID" class="form-control" asp-items="@(ViewData["MemberID"] as IEnumerable<SelectListItem>)"></select>
                 <span asp-validation-for="Borrowing.MemberID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Borrowing.BookID" class="control-label"></label>
-                <select asp-for="Borrowing.BookID" class="form-control" asp-items="ViewBag.BookID"></select>
+                <select asp-for="Borrowing.BookID" class="form-control" asp-items="@(ViewData["BookID"] as IEnumerable<SelectListItem>)"></select>
                 <span asp-validation-for="Borrowing.BookID" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Borrowing.ReturnDate" class="control-label"></label>
                 <input asp-for="Borrowing.ReturnDate" class="form-control" />

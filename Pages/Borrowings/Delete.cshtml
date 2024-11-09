@@ -12,18 +12,31 @@
     <h4>Borrowing</h4>
     <hr />
     <dl class="row">
+        <!-- Detalii despre Membru -->
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Borrowing.Member)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Borrowing.Member.ID)
+            @Html.DisplayFor(model => model.Borrowing.Member.FullName)  <!-- Afișează numele complet al membrului -->
         </dd>
+
+        <!-- Detalii despre Cartea împrumutată -->
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Borrowing.Book)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Borrowing.Book.Id)
+            @Html.DisplayFor(model => model.Borrowing.Book.Title)  <!-- Afișează titlul cărții -->
         </dd>
+
+        <!-- Detalii despre Editorul Cărții (opțional) -->
+        <dt class="col-sm-2">
+            Publisher:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Borrowing.Book.Publisher.PublisherName)  <!-- Afișează numele editorului -->
+        </dd>
+
+        <!-- Detalii despre Data Returnării -->
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Borrowing.ReturnDate)
         </dt>
@@ -31,7 +44,7 @@
             @Html.DisplayFor(model => model.Borrowing.ReturnDate)
         </dd>
     </dl>
-    
+
     <form method="post">
         <input type="hidden" asp-for="Borrowing.ID" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |

@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Iancau_Maria_Lab2.Data; // Ensure this directive exists
-using Iancau_Maria_Lab2.Models; // Ensure this directive exists
+using Iancau_Maria_Lab2.Data;
+using Iancau_Maria_Lab2.Models;
 using System.Collections.Generic;
-using System.Linq; // Required for LINQ queries
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore; // Required for Include method
+using Microsoft.EntityFrameworkCore;
 
 namespace Iancau_Maria_Lab2.Pages.Books
 {
@@ -40,7 +40,7 @@ namespace Iancau_Maria_Lab2.Pages.Books
                 .Include(b => b.Author)
                 .Include(b => b.Publisher)
                 .Include(b => b.BookCategories)
-                    .ThenInclude(bc => bc.Category) // Fixed variable name for clarity
+                    .ThenInclude(bc => bc.Category)
                 .AsNoTracking()
                 .OrderBy(b => b.Title)
                 .ToListAsync();
@@ -59,7 +59,7 @@ namespace Iancau_Maria_Lab2.Pages.Books
             {
                 BookID = id.Value;
                 Book book = BookD.Books
-                    .SingleOrDefault(i => i.Id == BookID); // Using SingleOrDefault for safety
+                    .SingleOrDefault(i => i.Id == BookID);
 
                 if (book != null)
                 {
@@ -86,3 +86,4 @@ namespace Iancau_Maria_Lab2.Pages.Books
         }
     }
 }
+

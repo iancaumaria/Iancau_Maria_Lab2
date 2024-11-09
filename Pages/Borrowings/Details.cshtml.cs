@@ -28,16 +28,21 @@ namespace Iancau_Maria_Lab2.Pages.Borrowings
                 return NotFound();
             }
 
-            var borrowing = await _context.Borrowing.FirstOrDefaultAsync(m => m.ID == id);
+            // Include Member și Book pentru a le adăuga la detaliile împrumutului
+            var borrowing = await _context.Borrowing
+                .Include(b => b.Member)  // Include membrul
+                .Include(b => b.Book)    // Include cartea
+                .ThenInclude(b => b.Publisher) // Dacă vrei să incluzi și editorul cărții
+                .FirstOrDefaultAsync(m => m.ID == id);
+
             if (borrowing == null)
             {
                 return NotFound();
             }
-            else
-            {
-                Borrowing = borrowing;
-            }
+
+            Borrowing = borrowing;
             return Page();
         }
+
     }
 }
