@@ -1,9 +1,12 @@
 ﻿using Iancau_Maria_Lab2.Models;
+using Microsoft.AspNetCore.Identity;
+
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Iancau_Maria_Lab2.Data
 {
-    public class Iancau_Maria_Lab2Context : DbContext
+    public class Iancau_Maria_Lab2Context :  IdentityDbContext<IdentityUser>
     {
         public Iancau_Maria_Lab2Context(DbContextOptions<Iancau_Maria_Lab2Context> options)
             : base(options)

@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Iancau_Maria_Lab2.Data;
 using Iancau_Maria_Lab2.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Iancau_Maria_Lab2.Pages.Categories
 {
+    [Authorize(Roles = "Admin")]
+
     public class CreateModel : PageModel
     {
         private readonly Iancau_Maria_Lab2.Data.Iancau_Maria_Lab2Context _context;

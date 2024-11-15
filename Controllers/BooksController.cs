@@ -19,8 +19,10 @@ namespace Iancau_Maria_Lab2.Controllers
         public IActionResult Index(int categoryId)
         {
             var books = _context.Book
-                .Where(b => b.BookCategories.Any(bc => bc.CategoryID == categoryId))
-                .Include(b => b.Author) // Include Author details
+                .Where(b => b.BookCategories.Any(bc => bc.CategoryID == categoryId)) // Filters books by category
+                .Include(b => b.Author) // Ensure you have an Author navigation property in your Book model
+                .Include(b => b.BookCategories) // Ensure you include the BookCategories relationship to filter
+                .ThenInclude(bc => bc.Category) // Include Category details within BookCategories
                 .ToList();
 
             return View(books);

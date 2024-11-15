@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Iancau_Maria_Lab2.Data;
 using Iancau_Maria_Lab2.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Iancau_Maria_Lab2.Pages.Publishers
 {
+    [Authorize(Roles = "Admin")]
+
     public class EditModel : PageModel
     {
         private readonly Iancau_Maria_Lab2Context _context;
